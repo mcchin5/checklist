@@ -1,0 +1,40 @@
+{
+    "Items": [
+        {
+            "content_desc": {
+                "S": "content3"
+            },
+            "content_id": {
+                "N": "3"
+            },
+            "content_link": {
+                "S": "link3"
+            }
+        },
+        {
+            "content_desc": {
+                "S": "content2"
+            },
+            "content_id": {
+                "N": "2"
+            },
+            "content_link": {
+                "S": "link2"
+            }
+        },
+        {
+            "content_desc": {
+                "S": "content1"
+            },
+            "content_id": {
+                "N": "1"
+            },
+            "content_link": {
+                "S": "link1"
+            }
+        }
+    ],
+    "Count": 3,
+    "ScannedCount": 3,
+    "ConsumedCapacity": null
+}

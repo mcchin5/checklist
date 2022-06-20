@@ -1,0 +1,70 @@
+{
+    "content": [
+        {
+            "PutRequest": {
+                "Item": {
+					"list_content": {
+						"L": [
+							{
+								"S": "content2"
+							},
+							{
+								"S": "content3"
+							}
+						]
+					},
+					"list_id": {
+						"N": "1"
+					},
+					"list_desc": {
+						"S": "job1"
+					}
+				}
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+					"list_content": {
+						"L": [
+							{
+								"S": "content1"
+							},
+							{
+								"S": "content3"
+							}
+						]
+					},
+					"list_id": {
+						"N": "2"
+					},
+					"list_desc": {
+						"S": "job2"
+					}
+				}
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+					"list_content": {
+						"L": [
+							{
+								"S": "content1"
+							},
+							{
+								"S": "content2"
+							}
+						]
+					},
+					"list_id": {
+						"N": "3"
+					},
+					"list_desc": {
+						"S": "job3"
+					}
+				}
+            }
+        }
+    ]
+}
