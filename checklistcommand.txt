@@ -1,0 +1,267 @@
+git clone https://github.com/mcchin5/checklist
+
+aws dynamodb create-table \
+--table-name \
+checklist \
+--attribute-definitions \
+AttributeName=list_id,AttributeType=N \
+AttributeName=list_desc,AttributeType=S \
+--key-schema \
+AttributeName=list_id,KeyType=HASH \
+AttributeName=list_desc,KeyType=RANGE \
+--provisioned-throughput \
+ReadCapacityUnits=10,WriteCapacityUnits=5
+
+
+aws dynamodb create-table \
+--table-name \
+content \
+--attribute-definitions \
+AttributeName=content_id,AttributeType=N \
+AttributeName=content_desc,AttributeType=S \
+--key-schema \
+AttributeName=content_id,KeyType=HASH \
+AttributeName=content_desc,KeyType=RANGE \
+--provisioned-throughput \
+ReadCapacityUnits=10,WriteCapacityUnits=5
+
+aws dynamodb batch-write-item --request-items file://contentitems.json
+aws dynamodb batch-write-item --request-items file://checklistitems.json
+
+aws s3 mb s3://web-checklist
+aws s3 website s3://web-checklist/ --index-document index.html --error-document error.html
+
+aws cognito-identity create-identity-pool \
+--identity-pool-name DynamoPool \
+--allow-unauthenticated-identities \
+--output json
+
+aws iam create-role --role-name Cognito_DynamoPoolUnauth --assume-role-policy-document file://myCognitoPolicy.json --output json
+
+aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess --role-name Cognito_DynamoPoolUnauth 
+
+aws iam get-role --role-name Cognito_DynamoPoolUnauth --output json > ./DynamoPool.json
+
+
+// Double check it worked using: 
+// aws cognito-identity get-identity-pool-roles  --identity-pool-id "us-east-1:xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+
+
+
+aws dynamodb create-table \
+--table-name \
+checklist \
+--attribute-definitions \
+AttributeName=list_id,AttributeType=N \
+AttributeName=list_desc,AttributeType=S \
+--key-schema \
+AttributeName=list_id,KeyType=HASH \
+AttributeName=list_desc,KeyType=RANGE \
+--provisioned-throughput \
+ReadCapacityUnits=10,WriteCapacityUnits=5 \
+
+{
+    "TableDescription": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "list_desc",
+                "AttributeType": "S"
+            },
+            {
+                "AttributeName": "list_id",
+                "AttributeType": "N"
+            }
+        ],
+        "TableName": "checklist",
+        "KeySchema": [
+            {
+                "AttributeName": "list_id",
+                "KeyType": "HASH"
+            },
+            {
+                "AttributeName": "list_desc",
+                "KeyType": "RANGE"
+            }
+        ],
+        "TableStatus": "CREATING",
+        "CreationDateTime": "2022-06-20T02:09:31.294000+00:00",
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 10,
+            "WriteCapacityUnits": 5
+        },
+        "TableSizeBytes": 0,
+        "ItemCount": 0,
+        "TableArn": "arn:aws:dynamodb:us-east-1:123227712048:table/checklist",
+        "TableId": "a0cbfe48-3cf0-4cb4-9d0b-fe1a38448254"
+    }
+}
+
+
+aws dynamodb create-table \
+--table-name \
+content \
+--attribute-definitions \
+AttributeName=content_id,AttributeType=N \
+AttributeName=content_desc,AttributeType=S \
+--key-schema \
+AttributeName=content_id,KeyType=HASH \
+AttributeName=content_desc,KeyType=RANGE \
+--provisioned-throughput \
+ReadCapacityUnits=10,WriteCapacityUnits=5 \
+
+{
+    "TableDescription": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "content_desc",
+                "AttributeType": "S"
+            },
+            {
+                "AttributeName": "content_id",
+                "AttributeType": "N"
+            }
+        ],
+        "TableName": "content",
+        "KeySchema": [
+            {
+                "AttributeName": "content_id",
+                "KeyType": "HASH"
+            },
+            {
+                "AttributeName": "content_desc",
+                "KeyType": "RANGE"
+            }
+        ],
+        "TableStatus": "CREATING",
+        "CreationDateTime": "2022-06-20T02:40:06.736000+00:00",
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 10,
+            "WriteCapacityUnits": 5
+        },
+        "TableSizeBytes": 0,
+        "ItemCount": 0,
+        "TableArn": "arn:aws:dynamodb:us-east-1:123227712048:table/content",
+        "TableId": "8bd74b7a-b348-41ee-b0bf-a03311d5a402"
+
+}
+
+aws dynamodb batch-write-item --request-items file://contentitems.json
+aws dynamodb batch-write-item --request-items file://checklistitems.json
+
+aws s3 mb s3://web-checklist
+aws s3 website s3://web-checklist/ --index-document index.html --error-document error.html
+
+aws cognito-identity create-identity-pool \
+--identity-pool-name DynamoPool \
+--allow-unauthenticated-identities \
+--output json > ./identity.json
+
+
+{
+    "IdentityPoolId": "us-east-1:8062b545-5440-49a3-908a-428aec8f990b",
+    "IdentityPoolName": "DynamoPool",
+    "AllowUnauthenticatedIdentities": true,
+    "IdentityPoolTags": {}
+}
+
+
+aws iam create-role --role-name Cognito_DynamoPoolUnauth --assume-role-policy-document file://myCognitoPolicy.json --output json > ./role.json
+
+
+{
+    "Role": {
+        "Path": "/",
+        "RoleName": "Cognito_DynamoPoolUnauth",
+        "RoleId": "AROARZMHRVIYFFGW4CQZA",
+        "Arn": "arn:aws:iam::123227712048:role/Cognito_DynamoPoolUnauth",
+        "CreateDate": "2022-06-20T05:27:01+00:00",
+        "AssumeRolePolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Principal": {
+                        "Federated": "cognito-identity.amazonaws.com"
+                    },
+                    "Action": "sts:AssumeRoleWithWebIdentity",
+                    "Condition": {
+                        "StringEquals": {
+                            "cognito-identity.amazonaws.com:aud": "us-east-1:8062b545-5440-49a3-908a-428aec8f990b"
+                        },
+                        "ForAnyValue:StringLike": {
+                            "cognito-identity.amazonaws.com:amr": "unauthenticated"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}
+
+
+aws iam attach-role-policy --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess --role-name Cognito_DynamoPoolUnauth 
+
+aws iam get-role --role-name Cognito_DynamoPoolUnauth --output json > ./DynamoPool.json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aws dynamodb create-table \
+--table-name \
+content \
+--attribute-definitions \
+AttributeName=content_id,AttributeType=S \
+--key-schema \
+AttributeName=content_id,KeyType=HASH \
+--provisioned-throughput \
+ReadCapacityUnits=10,WriteCapacityUnits=5
+
+aws dynamodb batch-write-item --request-items file://content.json
+
+aws dynamodb create-table \
+--table-name \
+checklist \
+--attribute-definitions \
+AttributeName=list_id,AttributeType=S \
+AttributeName=list_content,AttributeType=S \
+--key-schema \
+AttributeName=list_id,KeyType=HASH \
+AttributeName=list_content,KeyType=RANGE \
+--provisioned-throughput \
+ReadCapacityUnits=10,WriteCapacityUnits=5
+
+aws dynamodb batch-write-item --request-items file://checklist.json
+
+aws dynamodb scan \
+--table-name checklist \
+--region us-east-1 \
+--max-items 100 \
+--output json > ./checklist.json
+
+aws dynamodb scan \
+--table-name content \
+--region us-east-1 \
+--max-items 100 \
+--output json > ./content.json
