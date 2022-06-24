@@ -1,5 +1,7 @@
 git clone https://github.com/mcchin5/checklist
 
+cd checklist
+
 aws dynamodb create-table \
 --table-name \
 checklist \
@@ -26,15 +28,37 @@ AttributeName=content_desc,KeyType=RANGE \
 ReadCapacityUnits=10,WriteCapacityUnits=5
 
 aws dynamodb batch-write-item --request-items file://contentitems.json
+
 aws dynamodb batch-write-item --request-items file://checklistitems.json
 
 aws s3 mb s3://web-checklist
+
+aws s3api put-bucket-policy --bucket web-checklist --policy file://bucket_policy.json
+
+aws s3 sync ./checklist/ s3://web-checklist/
+
 aws s3 website s3://web-checklist/ --index-document index.html --error-document error.html
+
+
+
+
+
+
+
+aws s3api put-object --bucket web-checklist --key index.html --body index.html
+
+aws s3api put-object-acl --bucket web-checklist --key index.html --acl public-read
+
+
+
+http://web-checklist.s3-website-us-eest-1.amazonaws.com
 
 aws cognito-identity create-identity-pool \
 --identity-pool-name DynamoPool \
 --allow-unauthenticated-identities \
 --output json
+
+
 
 aws iam create-role --role-name Cognito_DynamoPoolUnauth --assume-role-policy-document file://myCognitoPolicy.json --output json
 
@@ -265,3 +289,9 @@ aws dynamodb scan \
 --region us-east-1 \
 --max-items 100 \
 --output json > ./content.json
+
+
+
+aws s3api put-object --bucket text-content --key dir-1/big-video-file.mp4 --body e:\media\videos\f-sharp-3-data-services.mp4
+
+

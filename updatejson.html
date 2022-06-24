@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+</head>
+
+<body>
+    <script type="module">
+        import jtable from "./testitemlist.json" assert { type: "json" };
+        var table = jtable;
+        console.log(table);
+        console.log(table.length);
+        console.log(table[0].Item);
+        table[0].Item = "item 5";
+        console.log(table[0].Item);
+
+        // var myBlob = new Blob(table, { type: "text/plain" });
+        // const fileHandle = await window.showSaveFilePicker({
+        //     types: [{
+        //         description: "Text file",
+        //         accept: { "text/plain": [".txt"] }
+        //     }]
+        // });
+
+        savefile(table);
+
+    </script>
+    <script>
+        async function saveFile() {
+            // (A) CREATE BLOB OBJECT
+            var myBlob = new Blob(["CONTENT"], { type: "text/plain" });
+
+            // (B) FILE HANDLER & FILE STREAM
+            const fileHandle = await window.showSaveFilePicker({
+                types: [{
+                    description: "Text file",
+                    accept: { "text/plain": [".txt"] }
+                }]
+            });
+            const fileStream = await fileHandle.createWritable();
+
+            // (C) WRITE FILE
+            await fileStream.write(myBlob);
+            await fileStream.close();
+        }
+    </script>
+
+    <input type="button" value="Save File" onclick="saveFile(table)" />
+
+    <script>
+        // var table = [
+        //     {
+        //         "ID": "1",
+        //         "Item": "item 1",
+        //         "Link": "link 1",
+        //         "url": "https://example.com"
+        //     },
+        //     {
+        //         "ID": "2",
+        //         "Item": "item 2",
+        //         "Link": "link 2",
+        //         "url": "https://example.com"
+        //     },
+        //     {
+        //         "ID": "3",
+        //         "Item": "item 3",
+        //         "Link": "link 3",
+        //         "url": "https://example.com"
+        //     },
+        //     {
+        //         "ID": "4",
+        //         "Item": "item 4",
+        //         "Link": "",
+        //         "url": ""
+        //     }
+        // ]
+    </script>
+
+</body>
+
+<script>
+    function getObjects(obj, key, val) {
+        var objects = [];
+        for (var i in obj) {
+            if (!obj.hasOwnProperty(i)) continue;
+            if (typeof obj[i] == 'object') {
+                objects = objects.concat(getObjects(obj[i], key, val));
+            } else if (i == key && obj[key] == val) {
+                objects.push(obj);
+            }
+        }
+        return objects;
+    }
+
+</script>
+
+
+<script>
+    // (B) "SAVE AS"
+    function savefile(table) {
+        var myFile = new File([table], "D:/WorkShop/aws/checklist/testitemlist.json", { type: "text/plain;charset=utf-8" });
+        saveAs(myFile);
+    }
+</script>
+
+</html>

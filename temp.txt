@@ -1,0 +1,28 @@
+<p>Outstanding list:</p>
+<p id="text1" style="display:none">content1 &nbsp; &nbsp; <a href="https://example.com/">link1</a></p>
+<p id="text2" style="display:none">content2 &nbsp; &nbsp; <a href="https://example.com/">link2</a></p>
+        
+
+document.getElementById("itemlist").rows[0].cells.length;
+
+document.getElementById("itemlist").tBodies[0].rows.length; 
+document.getElementById("itemlist").rows.length;
+
+        //tcolumns = document.getElementById("itemlist").rows[0].cells.length;
+        //tcol = document.getElementById("itemlist").rows.length;
+        trow = document.getElementById("itemlist").tBodies[0].rows.length;
+        // tcont = document.getElementById("itemlist").rows[1].cells[1].innerHTML;
+        // var ttab = document.getElementById("itemlist");
+        for (var i = 1; i<trow; i++){
+            ttab = document.getElementById("itemlist").rows[1];
+            var output = '<p id='.concat(ttab.cells[2].innerHTML,'style=display:none>',ttab.cells[3].innerHTML, '&nbsp; &nbsp; <a href=',ttab.cells[4].innerHTML,'>link1</a></p>');
+        }
+
+
+,'style=display:none>',ttab.cells[3].innerHTML, '&nbsp; &nbsp; <a href=',ttab.cells[4].innerHTML,'>link1</a></p>');
+
+
+        output.appendChild('hello');
+        var divContainer = document.getElementById("showOutstanding");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(output);
